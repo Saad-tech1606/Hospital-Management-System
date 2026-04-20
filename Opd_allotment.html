@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OPD Booking Form</title>
+    <link rel="stylesheet" href="Opd_allotment.css">
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script> <!-- Include Axios -->
+</head>
+<body>
+    <div class="background">
+        <div class="form-container">
+            <div class="form-header">
+                <h1>Book Your Appointment</h1>
+                <p>Quick and easy OPD booking at your fingertips.</p>
+            </div>
+            <form id="opdForm">
+                <div class="input-group">
+                    <label for="Name">Patient Name</label>
+                    <input type="text" id="Name" name="Name" placeholder="Enter your full name" required>
+                </div>
+                <div class="input-group">
+                    <label for="Email">Email ID</label>
+                    <input type="email" id="Email" name="Email" placeholder="Enter your email" required>
+                </div>
+                <div class="input-group">
+                    <label for="Address">Address</label>
+                    <input type="text" id="Address" name="Address" placeholder="Enter your full address" required>
+                </div>
+                <div class="input-group">
+                    <label for="Age">Age</label>
+                    <input type="number" id="Age" name="Age" min="1" max="120" placeholder="Enter your age" required>
+                </div>
+                <div class="input-group">
+                    <label for="PhoneNumber">Phone Number</label>
+                    <input type="tel" id="PhoneNumber" name="PhoneNumber" placeholder="Enter your phone number" required>
+                </div>
+                <div class="input-group">
+                    <label for="Gender">Gender</label>
+                    <select id="Gender" name="Gender" required>
+                        <option value="">Select your gender</option>
+                        <option value="male">Male</option>
+                        <option value="female">Female</option>
+                        <option value="other">Other</option>
+                    </select>
+                </div>
+                <div class="input-group">
+                    <label for="CauseOfAdmission">Briefly Explain Your Medical Problem</label>
+                    <textarea id="CauseOfAdmission" name="CauseOfAdmission" rows="4" placeholder="Describe your issue in brief" required></textarea>
+                </div>
+                <div class="input-group">
+                    <label for="RegistrationDate">Registration Date</label>
+                    <input type="date" id="RegistrationDate" name="RegistrationDate" required>
+                </div>
+                <button type="submit" class="submit-btn">Submit Appointment</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('opdForm').addEventListener('submit', async function(event) {
+            event.preventDefault(); // Prevent default form submission
+            
+            // Collect form data
+            const formData = {
+                Name: document.getElementById('Name').value,
+                Email: document.getElementById('Email').value,
+                Address: document.getElementById('Address').value,
+                Age: document.getElementById('Age').value,
+                PhoneNumber: document.getElementById('PhoneNumber').value,
+                Gender: document.getElementById('Gender').value,
+                CauseOfAdmission: document.getElementById('CauseOfAdmission').value,
+                RegistrationDate: document.getElementById('RegistrationDate').value
+            };
+
+            console.log('Form Data:', formData); // For debugging in console
+
+            try {
+                // Make POST request to backend
+                const response = await axios.post('https://hm-backend-hy5d.onrender.com/opd/opd_insert', formData);
+
+                // Handle successful response
+                alert('Appointment booked successfully! Response: ' + JSON.stringify(response.data));
+            } catch (error) {
+                // Handle error response
+                console.error('Error booking appointment:', error);
+                alert('Failed to book appointment. Please try again later.');
+            }
+        });
+    </script>
+</body>
+</html>

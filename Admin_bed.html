@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admit Patient Management</title>
+    <link rel="stylesheet" href="Admin_bed.css">
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+</head>
+<body>
+    <h1>Admit Patient Management</h1>
+
+    <!-- Table to Display Patients -->
+    <table id="patientTable">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Address</th>
+                <th>Email</th>
+                <th>Age</th>
+                <th>Phone Number</th>
+                <th>Gender</th>
+                <th>Blood Group</th>
+                <th>Department</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+
+    <!-- Update Form -->
+    <form id="updateForm" style="display:none;">
+        <h3>Update Patient</h3>
+        <input type="text" id="updateName" placeholder="Name" readonly>
+        <input type="text" id="updateAddress" placeholder="Address">
+        <input type="email" id="updateEmail" placeholder="Email">
+        <input type="number" id="updateAge" placeholder="Age">
+        <input type="text" id="updatePhoneNumber" placeholder="Phone Number">
+        <input type="text" id="updateGender" placeholder="Gender">
+        <input type="text" id="updateBloodGroup" placeholder="Blood Group">
+        <input type="text" id="updateDepartment" placeholder="Department">
+        <button type="submit">Update</button>
+    </form>
+
+    <script src="Admin_bed.js"></script>
+</body>
+</html>

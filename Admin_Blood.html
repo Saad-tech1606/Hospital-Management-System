@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blood Unit Management</title>
+    <link rel="stylesheet" href="Admin_Blood.css">
+ 
+</head>
+<body>
+    <h1>Blood Unit Management</h1>
+    <div id="message"></div>
+    <table id="bloodUnitTable">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Blood Group</th>
+                <th>Required Units</th>
+                <th>Age</th>
+                <th>Email</th>
+                <th>Address</th>
+                <th>Cause</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+
+    <div class="form-container">
+        <h2>Update Blood Unit</h2>
+        <form id="updateForm">
+            <input type="text" id="name" placeholder="Name" required readonly>
+            <input type="text" id="bloodGroup" placeholder="Blood Group" required>
+            <input type="number" id="requiredUnits" placeholder="Required Units" required>
+            <input type="number" id="age" placeholder="Age" required>
+            <input type="email" id="email" placeholder="Email" required>
+            <input type="text" id="address" placeholder="Address" required>
+            <input type="text" id="cause" placeholder="Cause" required>
+            <button type="submit" class="btn btn-update">Update</button>
+        </form>
+    </div>
+
+    <script>
+        const backendUrl = "https://hm-backend-hy5d.onrender.com/blood";
+
+        // Function to fetch and display blood units
+        async function fetchBloodUnits() {
+            const response = await fetch(`${backendUrl}/blood_all`);
+            const bloodUnits = await response.json();
+
+            const tableBody = document.querySelector("#bloodUnitTable tbody");
+            tableBody.innerHTML = "";
+
+            bloodUnits.forEach(unit => {
+                const row = document.createElement("tr");
+                row.innerHTML = `
+                    <td>${unit.Name}</td>
+                    <td>${unit.BloodGroup}</td>
+                    <td>${unit.RequiredUnits}</td>
+                    <td>${unit.Age}</td>
+                    <td>${unit.Email}</td>
+                    <td>${unit.Address}</td>
+                    <td>${unit.CauseForBloodNeed}</td>
+                    <td>
+                        <button class="btn btn-update" onclick="populateForm('${unit.Name}')">Update</button>
+                        <button class="btn btn-delete" onclick="deleteBloodUnit('${unit.Name}')">Delete</button>
+                    </td>
+                `;
+                tableBody.appendChild(row);
+            });
+        }
+
+        // Populate form with selected row data for updating
+        async function populateForm(name) {
+            const response = await fetch(`${backendUrl}/blood_all`);
+            const bloodUnits = await response.json();
+            const unit = bloodUnits.find(b => b.Name === name);
+
+            if (unit) {
+                document.getElementById("name").value = unit.Name;
+                document.getElementById("bloodGroup").value = unit.BloodGroup;
+                document.getElementById("requiredUnits").value = unit.RequiredUnits;
+                document.getElementById("age").value = unit.Age;
+                document.getElementById("email").value = unit.Email;
+                document.getElementById("address").value = unit.Address;
+                document.getElementById("cause").value = unit.CauseForBloodNeed;
+            }
+        }
+
+        // Update blood unit
+        document.getElementById("updateForm").addEventListener("submit", async (e) => {
+            e.preventDefault();
+
+            const data = {
+                Name: document.getElementById("name").value,
+                BloodGroup: document.getElementById("bloodGroup").value,
+                RequiredUnits: document.getElementById("requiredUnits").value,
+                Age: document.getElementById("age").value,
+                Email: document.getElementById("email").value,
+                Address: document.getElementById("address").value,
+                CauseForBloodNeed: document.getElementById("cause").value,
+            };
+
+            const response = await fetch(`${backendUrl}/blood_put`, {
+                method: "PUT",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(data),
+            });
+
+            const result = await response.json();
+            document.getElementById("message").innerText = result.update === "success" ? "Updated successfully!" : "Record not found!";
+            fetchBloodUnits();
+        });
+
+        // Delete blood unit
+        async function deleteBloodUnit(name) {
+            const response = await fetch(`${backendUrl}/blood_delete`, {
+                method: "DELETE",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ Name: name }),
+            });
+
+            const result = await response.json();
+            document.getElementById("message").innerText = result.delete === "success" ? "Deleted successfully!" : "Record not found!";
+            fetchBloodUnits();
+        }
+
+        // Initial fetch
+        fetchBloodUnits();
+    </script>
+</body>
+</html>

@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Digital Blood Bank - Registration</title>
+    <link rel="stylesheet" href="Digi_Blood.css">
+    <!-- Include Axios -->
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <h1>Digital Blood Bank</h1>
+        <h2>Patient Registration</h2>
+        <form id="bloodForm" action="#" method="post">
+            <div class="input-group">
+                <label for="name">Patient Name</label>
+                <input type="text" id="name" name="name" placeholder="Enter your full name" required>
+            </div>
+            <div class="input-group">
+                <label for="blood-group">Blood Group</label>
+                <select id="blood-group" name="blood-group" required>
+                    <option value="">Select your blood group</option>
+                    <option value="A+">A+</option>
+                    <option value="A-">A-</option>
+                    <option value="B+">B+</option>
+                    <option value="B-">B-</option>
+                    <option value="O+">O+</option>
+                    <option value="O-">O-</option>
+                    <option value="AB+">AB+</option>
+                    <option value="AB-">AB-</option>
+                </select>
+            </div>
+            <div class="input-group">
+                <label for="units">Required units</label>
+                <input type="number" id="units" name="units" min="1" max="10" placeholder=" Number of units required " required>
+            </div>
+            <div class="input-group">
+                <label for="age">Age</label>
+                <input type="number" id="age" name="age" min="1" max="120" placeholder="Enter your age" required>
+            </div>
+            <div class="input-group">
+                <label for="email">Email ID</label>
+                <input type="email" id="email" name="email" placeholder="Enter your email address" required>
+            </div>
+            <div class="input-group">
+                <label for="address">Address</label>
+                <textarea id="address" name="address" rows="3" placeholder="Enter your address" required></textarea>
+            </div>
+            <div class="input-group">
+                <label for="cause">Cause of Blood Need</label>
+                <textarea id="cause" name="cause" rows="3" placeholder="Explain why blood is needed" required></textarea>
+            </div>
+            <button type="submit" class="submit-btn">Register</button>
+        </form>
+    </div>
+
+    <script>
+        // Handle form submission
+        document.getElementById('bloodForm').addEventListener('submit', async function(event) {
+            event.preventDefault(); // Prevent the default form submission
+            
+            // Collect form data
+            const formData = {
+                Name: document.getElementById('name').value,
+                BloodGroup: document.getElementById('blood-group').value,
+                RequiredUnits: document.getElementById('units').value,
+                Age: document.getElementById('age').value,
+                Email: document.getElementById('email').value,
+                Address: document.getElementById('address').value,
+                CauseForBloodNeed: document.getElementById('cause').value
+            };
+
+            try {
+                // Send data to the backend using Axios
+                const response = await axios.post('https://hm-backend-hy5d.onrender.com/blood/blood_insert', formData);
+
+                if (response.status === 200) {
+                    alert('Registration successful!');
+                } else {
+                    alert('Error: ' + response.data.message);
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Something went wrong. Please try again.');
+            }
+        });
+    </script>
+</body>
+</html>
